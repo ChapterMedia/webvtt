@@ -60,13 +60,15 @@ private
     def add_a_cue(collected_lines)
       cue_opts = {}
       if collected_lines.first.include?('-->')
-        cue_opts[:identifier] = nil
         cue_opts[:cue_line] = collected_lines.first
+        cue_opts[:identifier] = cue_opts[:cue_line].to_s.parameterize
+        text_starts_at = 1
       elsif collected_lines[1].include?('-->')
         cue_opts[:identifier] = collected_lines.first
         cue_opts[:cue_line] = collected_lines[1]
+        text_starts_at = 2
       end
-      cue_opts[:text] = collected_lines[2..-1].join("\n")
+      cue_opts[:text] = collected_lines[text_starts_at..-1].join("\n")
       cues << Cue.new(cue_opts)
     end
 
