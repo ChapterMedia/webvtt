@@ -28,19 +28,21 @@ module Webvtt
       end
       collected_lines = []
       file_lines = file.dup.lines.to_a
-
+      cue_index = 0
       file_lines.each_with_index do |line,index|
         line.chomp!
 
         next if webvtt_line?(line)
         if line.empty?
           if !collected_lines.empty? and !notes?(collected_lines)
-            add_a_cue(collected_lines, index)
+            add_a_cue(collected_lines, cue_index)
+            cue_index += 1
           end
           collected_lines = []
         elsif !line.empty? and file_lines.length == (index + 1)
           collected_lines << line
-          add_a_cue(collected_lines, index)
+          add_a_cue(collected_lines, cue_index)
+          cue_index += 1
         else
           collected_lines << line
         end
