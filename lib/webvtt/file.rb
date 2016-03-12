@@ -35,12 +35,12 @@ module Webvtt
         next if webvtt_line?(line)
         if line.empty?
           if !collected_lines.empty? and !notes?(collected_lines)
-            add_a_cue(collected_lines)
+            add_a_cue(collected_lines, index)
           end
           collected_lines = []
         elsif !line.empty? and file_lines.length == (index + 1)
           collected_lines << line
-          add_a_cue(collected_lines)
+          add_a_cue(collected_lines, index)
         else
           collected_lines << line
         end
@@ -57,11 +57,11 @@ module Webvtt
 
 private
 
-    def add_a_cue(collected_lines)
+    def add_a_cue(collected_lines, ix = 0)
       cue_opts = {}
       if collected_lines.first.include?('-->')
         cue_opts[:cue_line] = collected_lines.first
-        cue_opts[:identifier] = cue_opts[:cue_line].to_s.parameterize
+        cue_opts[:identifier] = ix
         text_starts_at = 1
       elsif collected_lines[1].include?('-->')
         cue_opts[:identifier] = collected_lines.first
